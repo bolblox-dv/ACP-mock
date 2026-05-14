@@ -1,0 +1,1789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CC102 Mock Test | BSU IT</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg: #f5f0e8;
+  --surface: #fffdf7;
+  --surface2: #f0ebe0;
+  --border: #d9d0be;
+  --ink: #1a1611;
+  --ink2: #4a4035;
+  --muted: #9a8f7e;
+  --accent: #c84b2f;
+  --accent-light: #f5e6e2;
+  --green: #2d7a4f;
+  --green-light: #e2f0e8;
+  --yellow: #c47d00;
+  --yellow-light: #fdf3dc;
+  --blue: #1a5c9e;
+  --blue-light: #e0ecf8;
+  --shadow: 0 2px 0 #c0b8a8, 0 4px 16px #0002;
+  --radius: 12px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  background-image:
+    radial-gradient(circle at 20% 20%, #e8dfc844 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, #d4c9b044 0%, transparent 50%);
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+}
+
+/* ─── SCREENS ─── */
+.screen { display: none; }
+.screen.active { display: block; }
+
+/* ─── START SCREEN ─── */
+#start-screen {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+}
+#start-screen.active { display: flex; }
+
+.logo-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--ink);
+  color: var(--bg);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  padding: 6px 16px;
+  border-radius: 999px;
+  margin-bottom: 28px;
+  text-transform: uppercase;
+}
+.logo-badge::before { content: '◉'; color: var(--accent); }
+
+#start-screen h1 {
+  font-size: clamp(36px, 8vw, 68px);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -2px;
+  color: var(--ink);
+  margin-bottom: 12px;
+}
+#start-screen h1 em {
+  font-style: normal;
+  color: var(--accent);
+  display: block;
+}
+
+#start-screen p {
+  color: var(--ink2);
+  font-size: 16px;
+  max-width: 440px;
+  margin: 0 auto 40px;
+  line-height: 1.6;
+}
+
+.start-stats {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 40px;
+}
+.stat-pill {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 999px;
+  padding: 8px 20px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink2);
+  box-shadow: var(--shadow);
+}
+.stat-pill strong { color: var(--ink); }
+
+.btn-start {
+  background: var(--ink);
+  color: var(--bg);
+  border: none;
+  border-radius: var(--radius);
+  padding: 16px 48px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 0 #0006, 0 8px 24px #0002;
+  transition: transform 0.1s, box-shadow 0.1s;
+  position: relative;
+}
+.btn-start:hover { transform: translateY(-2px); box-shadow: 0 6px 0 #0006, 0 12px 28px #0003; }
+.btn-start:active { transform: translateY(2px); box-shadow: 0 2px 0 #0006; }
+
+.topic-pills {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 32px;
+  max-width: 540px;
+}
+.topic-pill {
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--muted);
+}
+
+/* ─── QUIZ SCREEN ─── */
+#quiz-screen {
+  min-height: 100vh;
+  padding: 0 0 80px;
+}
+
+/* TOP BAR */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--surface);
+  border-bottom: 1.5px solid var(--border);
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 2px 12px #0001;
+}
+.topbar-left { display: flex; align-items: center; gap: 10px; flex: 1; }
+.q-counter {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  padding: 4px 12px;
+  white-space: nowrap;
+}
+.part-tag {
+  font-size: 11px;
+  font-family: 'JetBrains Mono', monospace;
+  background: var(--accent-light);
+  color: var(--accent);
+  border: 1px solid #c84b2f44;
+  border-radius: 6px;
+  padding: 3px 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.timer {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+  background: var(--yellow-light);
+  border: 1.5px solid #c47d0044;
+  border-radius: 8px;
+  padding: 5px 14px;
+  min-width: 60px;
+  text-align: center;
+}
+.timer.warning { background: var(--accent-light); color: var(--accent); border-color: #c84b2f44; }
+
+/* PROGRESS */
+.progress-bar-wrap {
+  height: 4px;
+  background: var(--border);
+  position: relative;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.4s ease;
+}
+
+/* QUESTION CARD */
+.q-wrap {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 40px 24px 0;
+}
+
+.q-card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  animation: slideIn 0.3s ease;
+}
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.q-header {
+  background: var(--surface2);
+  border-bottom: 1.5px solid var(--border);
+  padding: 18px 24px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.q-num {
+  background: var(--ink);
+  color: var(--bg);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 6px;
+  padding: 3px 10px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.q-text {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--ink);
+}
+.q-text code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1px 6px;
+  color: var(--accent);
+}
+
+.q-body { padding: 20px 24px; }
+
+/* MULTIPLE CHOICE */
+.choices { display: flex; flex-direction: column; gap: 10px; }
+.choice-btn {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 16px;
+  cursor: pointer;
+  text-align: left;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink2);
+  transition: border-color 0.15s, background 0.15s, transform 0.1s;
+  width: 100%;
+}
+.choice-btn:hover:not(:disabled) {
+  border-color: var(--ink);
+  background: var(--surface);
+  transform: translateX(3px);
+}
+.choice-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 2px 8px;
+  flex-shrink: 0;
+  color: var(--muted);
+}
+.choice-btn.correct {
+  border-color: var(--green);
+  background: var(--green-light);
+  color: var(--green);
+}
+.choice-btn.correct .choice-label { background: var(--green); color: #fff; border-color: var(--green); }
+.choice-btn.wrong {
+  border-color: var(--accent);
+  background: var(--accent-light);
+  color: var(--accent);
+}
+.choice-btn.wrong .choice-label { background: var(--accent); color: #fff; border-color: var(--accent); }
+.choice-btn.reveal-correct {
+  border-color: var(--green) !important;
+  background: var(--green-light) !important;
+  color: var(--green) !important;
+}
+.choice-btn.reveal-correct .choice-label { background: var(--green); color: #fff; border-color: var(--green); }
+.choice-btn:disabled { cursor: not-allowed; opacity: 0.85; }
+.choice-text { flex: 1; line-height: 1.5; padding-top: 1px; }
+.choice-text code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  background: #0001;
+  border-radius: 3px;
+  padding: 1px 5px;
+}
+
+/* FILL IN BLANK */
+.fill-wrap { display: flex; flex-direction: column; gap: 12px; }
+.fill-input {
+  background: var(--bg);
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  color: var(--ink);
+  width: 100%;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.fill-input:focus { border-color: var(--ink); }
+.fill-input.correct { border-color: var(--green); background: var(--green-light); color: var(--green); }
+.fill-input.wrong { border-color: var(--accent); background: var(--accent-light); color: var(--accent); }
+.btn-submit {
+  background: var(--ink);
+  color: var(--bg);
+  border: none;
+  border-radius: 8px;
+  padding: 10px 28px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  align-self: flex-start;
+  box-shadow: 0 3px 0 #0005;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+.btn-submit:hover { transform: translateY(-1px); box-shadow: 0 4px 0 #0005; }
+.btn-submit:active { transform: translateY(1px); box-shadow: 0 1px 0 #0005; }
+.btn-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+/* FEEDBACK */
+.feedback {
+  margin-top: 16px;
+  padding: 14px 18px;
+  border-radius: 10px;
+  font-size: 14px;
+  line-height: 1.6;
+  display: none;
+  border-left: 4px solid;
+}
+.feedback.show { display: block; }
+.feedback.correct-fb { background: var(--green-light); border-color: var(--green); color: #1a4a32; }
+.feedback.wrong-fb { background: var(--accent-light); border-color: var(--accent); color: #7a1e10; }
+.feedback strong { font-weight: 700; }
+.feedback code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  background: #0001;
+  border-radius: 3px;
+  padding: 1px 5px;
+}
+.feedback pre {
+  background: #0000000a;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-top: 8px;
+  overflow-x: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+/* NEXT BUTTON */
+.btn-next {
+  margin-top: 16px;
+  background: var(--ink);
+  color: var(--bg);
+  border: none;
+  border-radius: 8px;
+  padding: 12px 32px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  display: none;
+  box-shadow: 0 3px 0 #0005;
+  transition: transform 0.1s, box-shadow 0.1s;
+  float: right;
+}
+.btn-next.show { display: inline-block; }
+.btn-next:hover { transform: translateY(-1px); }
+.btn-next:active { transform: translateY(1px); box-shadow: 0 1px 0 #0005; }
+.clearfix::after { content: ''; display: table; clear: both; }
+
+/* CODE SNIPPET */
+.code-snippet {
+  background: #1a1611;
+  border-radius: 10px;
+  padding: 16px 18px;
+  margin: 12px 0;
+  overflow-x: auto;
+}
+.code-snippet code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  line-height: 1.8;
+  color: #e8dfc8;
+  white-space: pre;
+}
+.kw { color: #ff8c7a; }
+.fn { color: #d4a8ff; }
+.str { color: #8ecfff; }
+.cm { color: #6e6456; font-style: italic; }
+.num { color: #ffc080; }
+.cls { color: #ffd080; }
+
+/* ─── RESULTS SCREEN ─── */
+#results-screen {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+}
+#results-screen.active { display: flex; }
+
+.score-ring {
+  width: 140px;
+  height: 140px;
+  position: relative;
+  margin: 0 auto 28px;
+}
+.score-ring svg { transform: rotate(-90deg); }
+.ring-bg { fill: none; stroke: var(--border); stroke-width: 10; }
+.ring-fill { fill: none; stroke-width: 10; stroke-linecap: round; transition: stroke-dashoffset 1s ease; }
+.score-num {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.score-label { font-size: 14px; font-family: 'JetBrains Mono', monospace; color: var(--muted); margin-top: 4px; }
+
+.result-title {
+  font-size: clamp(24px, 5vw, 40px);
+  font-weight: 700;
+  letter-spacing: -1px;
+  margin-bottom: 8px;
+}
+.result-sub { color: var(--ink2); margin-bottom: 32px; font-size: 15px; }
+
+.result-grid {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 36px;
+}
+.result-stat {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 20px;
+  min-width: 110px;
+  box-shadow: var(--shadow);
+}
+.result-stat .rs-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.result-stat .rs-lbl { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+.result-breakdown {
+  width: 100%;
+  max-width: 600px;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 28px;
+  text-align: left;
+  box-shadow: var(--shadow);
+}
+.rb-title { font-size: 12px; font-family: 'JetBrains Mono', monospace; color: var(--muted); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; }
+.rb-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.rb-label { font-size: 13px; font-weight: 600; width: 160px; flex-shrink: 0; color: var(--ink2); }
+.rb-bar { flex: 1; height: 10px; background: var(--border); border-radius: 999px; overflow: hidden; }
+.rb-fill { height: 100%; border-radius: 999px; transition: width 1s ease; }
+.rb-pct { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: var(--ink); width: 36px; text-align: right; }
+
+.btn-retry {
+  background: var(--ink);
+  color: var(--bg);
+  border: none;
+  border-radius: 10px;
+  padding: 14px 40px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 0 #0006;
+  transition: transform 0.1s, box-shadow 0.1s;
+  margin: 0 6px;
+}
+.btn-retry:hover { transform: translateY(-2px); box-shadow: 0 6px 0 #0006; }
+.btn-retry.secondary {
+  background: var(--surface);
+  color: var(--ink);
+  border: 1.5px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+/* MEDAL */
+.medal { font-size: 56px; margin-bottom: 16px; animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+@keyframes pop { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+.fill-blank-display {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 10px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.ctx-box {
+  background: #1a1611;
+  border: 1.5px solid #3a3020;
+  border-radius: 12px;
+  padding: 16px 18px;
+  margin: 0 0 16px;
+  font-size: 13px;
+  line-height: 1.75;
+}
+.ctx-code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12.5px;
+  color: #c8bfa8;
+  white-space: pre;
+  overflow-x: auto;
+  line-height: 1.8;
+}
+.ctx-comment { color: #5a5040; font-style: italic; }
+.ctx-tag {
+  display: inline-block;
+  background: #2a2010;
+  border: 1px solid #3a3020;
+  border-radius: 4px;
+  padding: 1px 7px;
+  font-size: 11px;
+  color: #8a7a60;
+  font-style: italic;
+  margin-left: 4px;
+  font-family: 'JetBrains Mono', monospace;
+}
+.ctx-highlight { color: #ffd080; font-weight: 700; }
+.ctx-wrong { color: #ff8c7a; }
+.ctx-blank {
+  display: inline-block;
+  background: #3a2010;
+  border: 1.5px dashed #c47d00;
+  border-radius: 4px;
+  padding: 1px 10px;
+  color: #c47d00;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* context table (light) */
+.ctx-table {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+}
+.ctx-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 8px 12px;
+  background: #2a2010;
+  border-radius: 8px;
+  border: 1px solid #3a3020;
+}
+.ctx-row.ctx-highlight-row { border-color: #c47d0066; background: #2a2000; }
+.ctx-mode {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  color: #ffd080;
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-width: 100px;
+}
+.ctx-mode.ctx-ttk { color: #d4a8ff; }
+.ctx-desc { color: #9a8f7e; line-height: 1.5; font-size: 12.5px; }
+.ctx-desc code { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #ffd080; background: #3a3020; border-radius: 3px; padding: 1px 5px; }
+
+/* scenario box */
+.ctx-scenario {
+  color: #9a8f7e;
+  font-size: 13px;
+  line-height: 1.6;
+  padding: 2px 0;
+}
+.ctx-scenario strong { color: #c8bfa8; }
+
+/* hint pill */
+.hint-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--yellow-light);
+  border: 1px solid #c47d0033;
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 12px;
+  color: var(--yellow);
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.hint-pill::before { content: '💡'; font-size: 13px; }
+
+@media (max-width: 540px) {
+  .topbar { padding: 10px 16px; gap: 10px; }
+  .q-wrap { padding: 24px 16px 0; }
+  .q-header, .q-body { padding: 14px 18px; }
+  .q-text { font-size: 15px; }
+  .ctx-mode { min-width: 80px; }
+  .ctx-code { font-size: 11.5px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ╔══════════════════════════════╗ -->
+<!-- ║         START SCREEN         ║ -->
+<!-- ╚══════════════════════════════╝ -->
+<div id="start-screen" class="screen active">
+  <div class="logo-badge">BSU · CC 102 · AY 2025–2026</div>
+  <h1>Final Exam<em>Mock Test</em></h1>
+  <p>40 questions covering all 5 parts of the final exam. Mix of multiple choice and fill-in-the-blank — shuffled every attempt.</p>
+
+  <div class="start-stats">
+    <div class="stat-pill"><strong>40</strong> Questions</div>
+    <div class="stat-pill"><strong>5</strong> Parts</div>
+    <div class="stat-pill"><strong>~30 min</strong> Estimated</div>
+    <div class="stat-pill">Instant Feedback</div>
+  </div>
+
+  <button class="btn-start" onclick="startQuiz()">Start Mock Test →</button>
+
+  <div class="topic-pills">
+    <div class="topic-pill">📁 File Handling</div>
+    <div class="topic-pill">🪟 Tkinter Widgets</div>
+    <div class="topic-pill">🔧 Functions</div>
+    <div class="topic-pill">📦 Modular Programming</div>
+    <div class="topic-pill">✅ Test Cases</div>
+  </div>
+</div>
+
+<!-- ╔══════════════════════════════╗ -->
+<!-- ║         QUIZ SCREEN          ║ -->
+<!-- ╚══════════════════════════════╝ -->
+<div id="quiz-screen" class="screen">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="q-counter" id="q-counter">Q 1 / 25</div>
+      <div class="part-tag" id="part-tag">PART 1</div>
+    </div>
+    <div class="timer" id="timer">00:00</div>
+  </div>
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-fill" id="progress-fill" style="width:4%"></div>
+  </div>
+  <div class="q-wrap">
+    <div class="q-card" id="q-card">
+      <!-- injected by JS -->
+    </div>
+  </div>
+</div>
+
+<!-- ╔══════════════════════════════╗ -->
+<!-- ║        RESULTS SCREEN        ║ -->
+<!-- ╚══════════════════════════════╝ -->
+<div id="results-screen" class="screen">
+  <div class="medal" id="result-medal">🏅</div>
+  <div class="result-title" id="result-title">Great work!</div>
+  <div class="result-sub" id="result-sub">Here's how you did:</div>
+
+  <div class="score-ring">
+    <svg viewBox="0 0 120 120" width="140" height="140">
+      <circle class="ring-bg" cx="60" cy="60" r="50"/>
+      <circle class="ring-fill" id="ring-fill" cx="60" cy="60" r="50"
+        stroke-dasharray="314" stroke-dashoffset="314"/>
+    </svg>
+    <div class="score-num" id="score-pct">0%</div>
+  </div>
+  <div class="score-label" id="score-label">0 / 25 correct</div>
+
+  <div class="result-grid">
+    <div class="result-stat">
+      <div class="rs-val" id="rs-correct" style="color:var(--green)">0</div>
+      <div class="rs-lbl">Correct</div>
+    </div>
+    <div class="result-stat">
+      <div class="rs-val" id="rs-wrong" style="color:var(--accent)">0</div>
+      <div class="rs-lbl">Wrong</div>
+    </div>
+    <div class="result-stat">
+      <div class="rs-val" id="rs-time">0:00</div>
+      <div class="rs-lbl">Time Taken</div>
+    </div>
+  </div>
+
+  <div class="result-breakdown">
+    <div class="rb-title">Performance by Part</div>
+    <div id="breakdown-rows"></div>
+  </div>
+
+  <div>
+    <button class="btn-retry" onclick="retryWrong()">Retry Wrong ✗</button>
+    <button class="btn-retry secondary" onclick="restartAll()">Start Over ↺</button>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+//  QUESTION BANK — 40 questions, 8 per part
+//  Fields: id, part, partLabel, type ('mc'|'fill'),
+//          text, context (optional HTML shown above question),
+//          hint (optional tip label),
+//          choices (mc), answer (mc=index, fill=string),
+//          alsoAccept (fill, optional array), feedback
+// ══════════════════════════════════════════
+const QUESTIONS = [
+
+// ════════════════════════════════════════
+//  PART 1 — FILE HANDLING  (8 questions)
+// ════════════════════════════════════════
+
+{ id:1, part:'Part 1', partLabel:'📁 File Handling', type:'mc',
+  context: `<div class="ctx-table">
+    <div class="ctx-row"><span class="ctx-mode">'w'</span><span class="ctx-desc">Write — <strong>creates or overwrites</strong> the file</span></div>
+    <div class="ctx-row"><span class="ctx-mode">'a'</span><span class="ctx-desc">Append — <strong>adds to end</strong>, existing content is safe</span></div>
+    <div class="ctx-row"><span class="ctx-mode">'r'</span><span class="ctx-desc">Read — opens for reading only, file must exist</span></div>
+  </div>`,
+  hint: 'Think: cumulative vs. fresh start',
+  text: 'Which file mode adds new content to a file <strong>WITHOUT</strong> deleting existing data?',
+  choices: ["'w' — write mode", "'a' — append mode", "'r' — read mode", "'x' — exclusive create mode"],
+  answer: 1,
+  feedback: '<strong>Append mode <code>\'a\'</code></strong> adds to the end and never erases existing content. Write mode <code>\'w\'</code> <em>wipes the entire file</em> the moment it is opened — even before you write anything.'
+},
+
+{ id:2, part:'Part 1', partLabel:'📁 File Handling', type:'mc',
+  context: `<div class="ctx-code">
+# subjects.txt currently contains:
+# Math
+# Science
+<span class="ctx-highlight">with open('subjects.txt', 'w') as f:
+    f.write('English\\n')</span></div>`,
+  hint: 'What does \'w\' do to an existing file?',
+  text: 'After this code runs, what will <code>subjects.txt</code> contain?',
+  choices: [
+    "Math\nScience\nEnglish  (all three subjects)",
+    "English  (only the new entry — previous content is gone)",
+    "Python raises a FileExistsError before writing",
+    "The file is unchanged — 'w' only works on new files"
+  ],
+  answer: 1,
+  feedback: "<code>'w'</code> mode <strong>silently wipes all existing content</strong> on open — before any <code>f.write()</code> is called. Math and Science are lost. This is why cumulative lists must use <code>'a'</code> instead."
+},
+
+{ id:3, part:'Part 1', partLabel:'📁 File Handling', type:'fill',
+  context: `<div class="ctx-code">with open('notes.txt', 'r') as f:
+    print( f.<span class="ctx-blank">____</span>() )  # reads entire file at once</div>`,
+  hint: 'The method that returns the whole file as one string',
+  text: 'What method goes in the blank to read all file contents in a single call?',
+  answer: 'read',
+  alsoAccept: ['read()'],
+  feedback: '<strong><code>f.read()</code></strong> returns the entire file as one string including all newlines. You need a separate <code>with open(..., \'r\')</code> block to read — you cannot read inside an <code>\'a\'</code> write block.'
+},
+
+{ id:4, part:'Part 1', partLabel:'📁 File Handling', type:'mc',
+  context: `<div class="ctx-scenario">
+  <strong>Scenario:</strong> A student app lets you add one subject per run.<br>
+  After 3 runs the file should contain all 3 subjects — not just the last one entered.
+  </div>`,
+  hint: 'You need to KEEP previous entries, not replace them',
+  text: 'Which code correctly builds a cumulative subject list?',
+  choices: [
+    "open('subjects.txt', 'w') → f.write(subject + '\\n')",
+    "open('subjects.txt', 'a') → f.write(subject + '\\n')",
+    "open('subjects.txt', 'r') → f.write(subject + '\\n')",
+    "open('subjects.txt', 'w+') → f.write(subject)  # no \\n"
+  ],
+  answer: 1,
+  feedback: "Use <code>'a'</code> (append) with <code>'\\n'</code> so each subject appears on its own line. <code>'w'</code> destroys previous subjects every run. <code>'r'</code> is read-only and cannot write at all. Option D uses write mode (same problem as A) and also skips the newline."
+},
+
+{ id:5, part:'Part 1', partLabel:'📁 File Handling', type:'mc',
+  context: `<div class="ctx-code"><span class="ctx-comment"># CORRECT pattern — two separate blocks</span>
+subject = input('Enter subject: ')
+
+with open('subjects.txt', 'a') as f:   <span class="ctx-tag">① write</span>
+    f.write(subject + '\\n')
+
+with open('subjects.txt', 'r') as f:   <span class="ctx-tag">② read</span>
+    print(f.read())</div>`,
+  hint: 'Why can\'t you combine ① and ② into one block?',
+  text: 'Why must you open the file a <strong>second time</strong> to display contents after appending?',
+  choices: [
+    "Python forbids having two open() calls in the same program",
+    "The 'a' mode is write-only — a separate open() in 'r' mode is needed to read back the contents",
+    "The with block automatically closes and flushes the file, so you must reopen to see the new data",
+    "Both B and C are correct"
+  ],
+  answer: 3,
+  feedback: "Both B and C are true: <code>'a'</code> is <strong>write-only</strong> (you cannot call <code>f.read()</code> inside it), AND the <code>with</code> block closes and flushes the file when it exits — reopening in <code>'r'</code> is the only way to read the saved data."
+},
+
+{ id:6, part:'Part 1', partLabel:'📁 File Handling', type:'fill',
+  context: `<div class="ctx-code">name = input('Enter name: ')
+with open('student.txt', 'w') as f:
+    f.write('Name: ' + name + <span class="ctx-blank">____</span>)
+    #                         ↑ what goes here?</div>`,
+  hint: 'This character moves the cursor to the next line',
+  text: 'What string must you add so each piece of data appears on its own line?',
+  answer: "'\\n'",
+  alsoAccept:['\\n', '"\\n"', '\\n'],
+  feedback: "<strong><code>'\\n'</code></strong> is the <em>newline escape character</em>. Without it, consecutive writes like <code>'Name: Ana'</code> and <code>'Age: 20'</code> would be joined on a single line: <code>Name: AnaAge: 20</code>."
+},
+
+{ id:7, part:'Part 1', partLabel:'📁 File Handling', type:'mc',
+  context: `<div class="ctx-code"><span class="ctx-comment"># Style A — manual open/close</span>
+f = open('file.txt', 'w')
+f.write(data)
+f.close()   # what if an error happens before this?
+
+<span class="ctx-comment"># Style B — with statement (context manager)</span>
+with open('file.txt', 'w') as f:
+    f.write(data)
+    # file closes automatically here, even on error</div>`,
+  hint: 'What happens to Style A if an error occurs before f.close()?',
+  text: 'Why is the <code>with open()</code> pattern preferred over manually calling <code>f.close()</code>?',
+  choices: [
+    "It executes faster because Python skips error checking",
+    "It automatically closes and flushes the file even if an error occurs inside the block",
+    "It allows reading and writing simultaneously",
+    "It prevents other programs from accessing the file while it's open"
+  ],
+  answer: 1,
+  feedback: "The <code>with</code> statement is a <strong>context manager</strong>. It calls <code>f.close()</code> automatically when the block ends — whether it ends normally or with an exception. In Style A, if an error crashes the program before <code>f.close()</code>, the file can be corrupted or data lost."
+},
+
+{ id:8, part:'Part 1', partLabel:'📁 File Handling', type:'mc',
+  context: `<div class="ctx-scenario">
+  <strong>Practice Problem 1 from reviewer:</strong><br>
+  A registration desk records student name and age. Each entry <em>overwrites</em> the previous one.
+  The program must save both fields to <code>student.txt</code> and print a confirmation message.
+  </div>`,
+  hint: 'Write mode overwrites. Print confirmation goes OUTSIDE the with block.',
+  text: 'Which code matches the <strong>exact pattern</strong> from the reviewer?',
+  choices: [
+    `f.write(name + '\\n'); f.write(age + '\\n'); print('Saved')  # no open()`,
+    `with open('student.txt','a') as f:\n  f.write('Name: '+name+'\\n')\n  f.write('Age: '+age+'\\n')\nprint('Saved')`,
+    `with open('student.txt','w') as f:\n  f.write('Name: '+name+'\\n')\n  f.write('Age: '+age+'\\n')\nprint('Saved to student.txt')`,
+    `open('student.txt','w'); write(name); write(age)`
+  ],
+  answer: 2,
+  feedback: "Option C matches the reviewer: <code>'w'</code> mode (each registration <em>overwrites</em>), two <code>f.write()</code> lines each with <code>'\\n'</code>, and <code>print()</code> is <strong>outside</strong> the <code>with</code> block. Option B wrongly uses <code>'a'</code>. Option A and D have no valid <code>open()</code> call."
+},
+
+// ════════════════════════════════════════
+//  PART 2 — TKINTER WIDGETS  (8 questions)
+// ════════════════════════════════════════
+
+{ id:9, part:'Part 2', partLabel:'🪟 Tkinter Widgets', type:'mc',
+  context: `<div class="ctx-table">
+    <div class="ctx-row"><span class="ctx-mode">tk.Button</span><span class="ctx-desc">Standard tk → only needs <code>import tkinter as tk</code></span></div>
+    <div class="ctx-row"><span class="ctx-mode">tk.Text</span><span class="ctx-desc">Standard tk → only needs <code>import tkinter as tk</code></span></div>
+    <div class="ctx-row"><span class="ctx-mode ctx-ttk">ttk.Entry</span><span class="ctx-desc">ttk widget → needs <code>from tkinter import ttk</code></span></div>
+    <div class="ctx-row"><span class="ctx-mode ctx-ttk">ttk.Spinbox</span><span class="ctx-desc">ttk widget → needs <code>from tkinter import ttk</code></span></div>
+    <div class="ctx-row"><span class="ctx-mode ctx-ttk">ttk.Progressbar</span><span class="ctx-desc">ttk widget → needs <code>from tkinter import ttk</code></span></div>
+  </div>`,
+  hint: 'Button and Text are standard tk. The three newer ones are ttk.',
+  text: 'Which group of widgets ALL require <code>from tkinter import ttk</code>?',
+  choices: [
+    "Button, Text, Entry",
+    "Entry, Spinbox, Progressbar",
+    "Button, Spinbox, Text",
+    "All five widgets require ttk"
+  ],
+  answer: 1,
+  feedback: "<strong>ttk widgets (3):</strong> <code>ttk.Entry</code>, <code>ttk.Spinbox</code>, <code>ttk.Progressbar</code> — all need <code>from tkinter import ttk</code>.<br><strong>Standard tk widgets (2):</strong> <code>tk.Button</code>, <code>tk.Text</code> — only need <code>import tkinter as tk</code>."
+},
+
+{ id:10, part:'Part 2', partLabel:'🪟 Tkinter Widgets', type:'mc',
+  context: `<div class="ctx-code"><span class="ctx-comment"># These are all WRONG — spot why each fails:</span>
+ttk.Spinbox(root, from=1, to=10)      <span class="ctx-tag">❌ 'from' is a Python keyword</span>
+tk.Spinbox(root, min=1, max=10)       <span class="ctx-tag">❌ wrong class + wrong params</span>
+ttk.Spinbox(root, range=(1,10))       <span class="ctx-tag">❌ no 'range' parameter exists</span>
+
+<span class="ctx-comment"># The CORRECT version:</span>
+ttk.Spinbox(root, from_=<span class="ctx-blank">?</span>, to=<span class="ctx-blank">?</span>)    <span class="ctx-tag">✓ from_ with underscore</span></div>`,
+  hint: 'from_ has an underscore because \'from\' is a reserved keyword in Python',
+  text: 'Which line correctly creates a Spinbox letting users pick a number from 1 to 10?',
+  choices: [
+    "ttk.Spinbox(root, from=1, to=10)",
+    "ttk.Spinbox(root, from_=1, to=10)",
+    "tk.Spinbox(root, min=1, max=10)",
+    "ttk.Spinbox(root, range=(1,10))"
+  ],
+  answer: 1,
+  feedback: "Use <code>from_=</code> (underscore) because <code>from</code> is a reserved Python keyword — using it as a parameter name causes a <code>SyntaxError</code>. The correct class is <code>ttk.Spinbox</code>, so <code>from tkinter import ttk</code> is also required."
+},
+
+{ id:11, part:'Part 2', partLabel:'🪟 Tkinter Widgets', type:'fill',
+  context: `<div class="ctx-code">import tkinter as tk
+root = tk.Tk()
+root.title('My App')
+
+btn = tk.Button(root, text='Click Me')
+btn.pack(pady=10)
+
+root.<span class="ctx-blank">____</span>()  <span class="ctx-comment"># ← this MUST be the last line</span></div>`,
+  hint: 'Without this line, the window opens and immediately disappears',
+  text: 'What method must be called last to keep the Tkinter window open and responsive?',
+  answer: 'mainloop',
+  alsoAccept: ['mainloop()'],
+  feedback: "<strong><code>root.mainloop()</code></strong> starts the <em>event loop</em> — it keeps the window alive and listens for clicks, key presses, and other events. Without it, the window flashes open and Python exits immediately."
+},
+
+{ id:12, part:'Part 2', partLabel:'🪟 Tkinter Widgets', type:'mc',
+  context: `<div class="ctx-table">
+    <div class="ctx-row"><span class="ctx-mode">tk.Text</span><span class="ctx-desc">Multi-line area — params: <code>height=5, width=40</code></span></div>
+    <div class="ctx-row"><span class="ctx-mode ctx-ttk">ttk.Entry</span><span class="ctx-desc">Single-line field — param: <code>width=30</code> only</span></div>
+  </div>`,
+  hint: 'Text = paragraph box. Entry = one-line input like a search bar.',
+  text: 'What is the key difference between <code>tk.Text</code> and <code>ttk.Entry</code>?',
+  choices: [
+    "They are identical — just different naming conventions",
+    "tk.Text is multi-line; ttk.Entry is a single-line input field",
+    "ttk.Entry is multi-line; tk.Text is single-line",
+    "tk.Text needs the ttk import; ttk.Entry only needs tk"
+  ],
+  answer: 1,
+  feedback: "<code>tk.Text</code> is a <strong>multi-line</strong> text area — you can set both <code>height</code> and <code>width</code>. <code>ttk.Entry</code> is a <strong>single-line</strong> input field — only <code>width</code> applies. Think: Text = textarea, Entry = input box."
+},
+
+{ id:13, part:'Part 2', partLabel:'🪟 Tkinter Widgets', type:'mc',
+  context: `<div class="ctx-table">
+    <div class="ctx-row"><span class="ctx-mode">mode='determinate'</span><span class="ctx-desc">Shows a <strong>fixed value</strong> you set (e.g. 75% done)</span></div>
+    <div class="ctx-row"><span class="ctx-mode ctx-ttk">mode='indeterminate'</span><span class="ctx-desc">Bar <strong>bounces continuously</strong> — progress amount unknown</span></div>
+  </div>`,
+  hint: 'Indeterminate = "working, but I don\'t know how long"',
+  text: 'A Progressbar is created with <code>mode=\'indeterminate\'</code>. What does it do?',
+  choices: [
+    "It displays a fixed percentage that you manually update",
+    "It bounces/animates continuously to signal ongoing activity without showing a specific value",
+    "It stays hidden until you call .start() with a value",
+    "It requires you to set a value between 0 and 100 before it renders"
+  ],
+  answer: 1,
+  feedback: "<code>mode='indeterminate'</code> = the bar slides back and forth to show <em>something is happening</em> when you don't know the exact progress (e.g. network request). <code>mode='determinate'</code> = you control the value (0–100) to show exact progress."
+},
+
+{ id:14, part:'Part 2', partLabel:'🪟 Tkinter Widgets', type:'fill',
+  context: `<div class="ctx-code">import tkinter as tk
+root = tk.Tk()
+root.<span class="ctx-blank">____</span>('Button Demo')  <span class="ctx-comment"># sets window title bar text</span>
+btn = tk.Button(root, text='Click Me')
+btn.pack(pady=10)
+root.mainloop()</div>`,
+  hint: 'The method name matches what it sets — the window\'s title',
+  text: 'What method sets the text shown in the window\'s title bar?',
+  answer: 'title',
+  alsoAccept: ['title()'],
+  feedback: "<strong><code>root.title('Button Demo')</code></strong> sets the text shown in the OS title bar of the window. Call it right after <code>root = tk.Tk()</code>, before placing any widgets."
+},
+
+{ id:15, part:'Part 2', partLabel:'🪟 Tkinter Widgets', type:'mc',
+  context: `<div class="ctx-code">import tkinter as tk
+<span class="ctx-highlight ctx-wrong"># from tkinter import ttk  ← this line is missing!</span>
+root = tk.Tk()
+root.title('Entry Demo')
+entry = ttk.Entry(root, width=30)
+entry.pack(pady=10)
+root.mainloop()</div>`,
+  hint: 'Look at what is missing vs. what is being used',
+  text: 'This code will crash when run. What is the error and why?',
+  choices: [
+    "SyntaxError — Entry should use tk.Entry, not ttk.Entry",
+    "NameError — 'ttk' is used but never imported",
+    "AttributeError — pack() is not valid for Entry widgets",
+    "RuntimeError — mainloop() must come before pack()"
+  ],
+  answer: 1,
+  feedback: "Python raises <code>NameError: name 'ttk' is not defined</code> because <code>ttk.Entry</code> is used but <code>from tkinter import ttk</code> is missing. The fix: add that import line after <code>import tkinter as tk</code>."
+},
+
+{ id:16, part:'Part 2', partLabel:'🪟 Tkinter Widgets', type:'mc',
+  context: `<div class="ctx-table">
+    <div class="ctx-row"><span class="ctx-mode">import tkinter as tk</span><span class="ctx-desc">Needed for: <code>tk.Button</code>, <code>tk.Text</code>, <code>tk.Tk()</code></span></div>
+    <div class="ctx-row"><span class="ctx-mode ctx-ttk">from tkinter import ttk</span><span class="ctx-desc">Needed for: <code>ttk.Entry</code>, <code>ttk.Spinbox</code>, <code>ttk.Progressbar</code></span></div>
+  </div>`,
+  hint: 'Match the widget prefix (tk. vs ttk.) to its import',
+  text: 'Which widget–import pair is <strong>correctly</strong> matched?',
+  choices: [
+    "ttk.Button  →  from tkinter import ttk",
+    "tk.Progressbar  →  import tkinter as tk",
+    "ttk.Progressbar  →  from tkinter import ttk",
+    "tk.Entry  →  from tkinter import ttk"
+  ],
+  answer: 2,
+  feedback: "<code>ttk.Progressbar</code> is a ttk widget → needs <code>from tkinter import ttk</code>. ✓<br>There is <strong>no</strong> <code>tk.Progressbar</code> or <code>ttk.Button</code> in standard Tkinter. <code>tk.Entry</code> does exist but is the older non-ttk version that only needs <code>import tkinter as tk</code>."
+},
+
+// ════════════════════════════════════════
+//  PART 3 — FUNCTIONS  (8 questions)
+// ════════════════════════════════════════
+
+{ id:17, part:'Part 3', partLabel:'🔧 Functions', type:'mc',
+  context: `<div class="ctx-code"><span class="ctx-comment"># Print-only function — no return statement</span>
+def greet_student(name):
+    print('Welcome, ' + name + '!')
+
+<span class="ctx-comment"># What happens when you do this?</span>
+<span class="ctx-highlight">print( greet_student('Maria') )</span></div>`,
+  hint: 'The function already prints inside. What does print() get as a return value?',
+  text: 'What is the <strong>exact output</strong> when this code runs?',
+  choices: [
+    "Welcome, Maria!",
+    "Welcome, Maria!\nNone",
+    "None",
+    "A TypeError is raised"
+  ],
+  answer: 1,
+  feedback: "Two things happen: (1) <code>greet_student('Maria')</code> executes and prints <code>Welcome, Maria!</code>. (2) The function returns <code>None</code> (no return statement). (3) The outer <code>print(None)</code> prints <code>None</code>. Total output = two lines. <strong>Never wrap a print-only function in another print().</strong>"
+},
+
+{ id:18, part:'Part 3', partLabel:'🔧 Functions', type:'fill',
+  context: `<div class="ctx-code">def compute_bill(kwh):
+    if kwh <= 100:
+        bill = kwh * 10           <span class="ctx-comment"># ₱10/kWh for first 100</span>
+    else:
+        bill = (100 * 10) + ((kwh - <span class="ctx-blank">____</span>) * 12)
+        #  excess = kWh used BEYOND 100, charged at ₱12
+    return bill
+
+<span class="ctx-comment"># compute_bill(150) → should return ₱1,600</span></div>`,
+  hint: 'The excess is the amount OVER the 100 kWh threshold',
+  text: 'What number fills the blank so the excess kWh is calculated correctly?',
+  answer: '100',
+  feedback: "Only kWh <strong>beyond 100</strong> are charged at ₱12. So excess = <code>kwh − 100</code>. For 150 kWh: excess = 50 × ₱12 = ₱600. Plus the first 100 × ₱10 = ₱1,000. Total = <strong>₱1,600</strong>."
+},
+
+{ id:19, part:'Part 3', partLabel:'🔧 Functions', type:'mc',
+  context: `<div class="ctx-code"><span class="ctx-comment"># Which of these is syntactically correct AND returns a value?</span>
+A: def compute(x):          <span class="ctx-comment"># only prints, returns None</span>
+       print(x * 2)
+
+B: def compute(x):          <span class="ctx-comment"># computes and returns</span>
+       result = x * 2
+       return result
+
+C: def compute():            <span class="ctx-comment"># no parameter, empty return</span>
+       x = 5
+       return
+
+D: def compute:              <span class="ctx-comment"># SyntaxError — missing ()</span>
+       return x * 2</div>`,
+  hint: 'Look for: parameter ✓, computation ✓, return value ✓, valid syntax ✓',
+  text: 'Which function definition is syntactically correct AND properly returns a computed value?',
+  choices: [
+    "A — def compute(x): print(x * 2)",
+    "B — def compute(x): result = x * 2; return result",
+    "C — def compute(): x = 5; return",
+    "D — def compute: return x * 2"
+  ],
+  answer: 1,
+  feedback: "<strong>B is correct</strong>: accepts a parameter → computes a result → returns it to the caller. A only prints (returns None implicitly). C returns nothing useful. D crashes immediately — <code>def</code> requires parentheses: <code>def compute():</code>."
+},
+
+{ id:20, part:'Part 3', partLabel:'🔧 Functions', type:'mc',
+  context: `<div class="ctx-code">def compute_bill(kwh):
+    if kwh <= 100:
+        bill = kwh * 10
+    else:
+        bill = (100 * 10) + ((kwh - 100) * 12)
+    return bill
+
+result = compute_bill(<span class="ctx-highlight">80</span>)
+print(result)   <span class="ctx-comment"># what prints here?</span></div>`,
+  hint: '80 ≤ 100, so which branch of the if-else runs?',
+  text: 'What value does <code>compute_bill(80)</code> return?',
+  choices: ["₱960", "₱800", "₱1,600", "₱1,000"],
+  answer: 1,
+  feedback: "80 ≤ 100 → the <code>if</code> branch runs: <code>bill = 80 × 10 = ₱800</code>. The <code>else</code> branch (excess at ₱12) is skipped entirely. Answer: <strong>₱800</strong>."
+},
+
+{ id:21, part:'Part 3', partLabel:'🔧 Functions', type:'mc',
+  context: `<div class="ctx-code"><span class="ctx-comment"># WITH return — caller gets a value</span>
+def compute(x):
+    return x * 2
+
+output = compute(5)   <span class="ctx-comment"># output = 10  ✓</span>
+print(output)
+
+<span class="ctx-comment"># WITHOUT return — caller gets None</span>
+def display(name):
+    print('Hello, ' + name + '!')
+
+result = display('Ana')   <span class="ctx-comment"># result = None !</span></div>`,
+  hint: 'Every Python function returns SOMETHING — if you don\'t say what, it returns None',
+  text: 'What is the key behavioral difference between a function WITH <code>return</code> and one WITHOUT?',
+  choices: [
+    "A function without return crashes Python with a ValueError",
+    "With return passes a value back to the caller; without return the caller receives None",
+    "A function without return is faster because it skips the return step",
+    "There is no difference — both work identically"
+  ],
+  answer: 1,
+  feedback: "Functions without an explicit <code>return</code> <strong>implicitly return <code>None</code></strong>. Use <code>return</code> when the caller needs the computed value (to store, print, or pass it). Use print-only when you just want to display something and the caller doesn't need the value."
+},
+
+{ id:22, part:'Part 3', partLabel:'🔧 Functions', type:'fill',
+  context: `<div class="ctx-code"><span class="ctx-comment"># Two function types:</span>
+
+<span class="ctx-comment"># Type 1 — gives value BACK to caller</span>
+def compute(x):
+    return x * 2          <span class="ctx-tag">← has return</span>
+
+<span class="ctx-comment"># Type 2 — only shows output, gives nothing back</span>
+def greet_student(name):
+    print('Welcome, ' + name + '!')   <span class="ctx-tag">← print-only</span></div>`,
+  hint: 'The type named after what it does instead of returning',
+  text: 'A function that only shows output and has no <code>return</code> statement is called a <strong>____-only</strong> function.',
+  answer: 'print',
+  alsoAccept: ['printing','print only','print-only'],
+  feedback: "A <strong>print-only function</strong> outputs directly to the console and implicitly returns <code>None</code>. Use it when you just want to display a result. If the result needs to be stored or used elsewhere, use <code>return</code> instead."
+},
+
+{ id:23, part:'Part 3', partLabel:'🔧 Functions', type:'mc',
+  context: `<div class="ctx-code">def compute_bill(kwh):
+    if kwh <= 100:
+        bill = kwh * 10
+    else:
+        bill = (100 * 10) + ((kwh - 100) * 12)
+    return bill
+
+result = compute_bill(<span class="ctx-highlight">120</span>)
+<span class="ctx-comment"># Trace: 120 > 100 → else branch
+# bill = (100 × 10) + ((120 − 100) × 12)
+# bill = 1000 + (? × 12)</span></div>`,
+  hint: 'Excess = 120 − 100 = 20 kWh, charged at ₱12 each',
+  text: 'What does <code>compute_bill(120)</code> return?',
+  choices: ["₱1,200", "₱1,440", "₱1,240", "₱1,400"],
+  answer: 2,
+  feedback: "120 > 100 → else branch: <code>(100 × 10) + ((120 − 100) × 12) = 1,000 + (20 × 12) = 1,000 + 240 = <strong>₱1,240</strong></code>. Option A (₱1,200) is 120 × 10 — wrong because it ignores the tiered rate."
+},
+
+{ id:24, part:'Part 3', partLabel:'🔧 Functions', type:'mc',
+  context: `<div class="ctx-code">def greet_student(name):
+    ___________________________  <span class="ctx-comment"># ← which line goes here?</span>
+
+student_name = input('Enter student name: ')
+greet_student(student_name)
+
+<span class="ctx-comment"># Expected output when name = 'Juan':
+# Welcome, Juan!
+#  ↑       ↑  ↑
+# space  comma  exclamation</span></div>`,
+  hint: 'Check: comma after Welcome, ! at end, and uses print (not return)',
+  text: 'Which line correctly produces <code>Welcome, Juan!</code> inside the function?',
+  choices: [
+    "print('Welcome ' + name + '!')",
+    "print('Welcome, ' + name + '!')",
+    "print('Welcome, ' + name)",
+    "return 'Welcome, ' + name + '!'"
+  ],
+  answer: 1,
+  feedback: "The exact required format is <code>Welcome, [name]!</code>:<br>• Option A: missing the <strong>comma</strong> after 'Welcome'<br>• Option B: ✓ correct — comma and exclamation both present<br>• Option C: missing the <strong>!</strong> at the end<br>• Option D: uses <code>return</code> instead of <code>print</code> — nothing is displayed"
+},
+
+// ════════════════════════════════════════
+//  PART 4 — MODULAR PROGRAMMING  (8 questions)
+// ════════════════════════════════════════
+
+{ id:25, part:'Part 4', partLabel:'📦 Modular Programming', type:'mc',
+  context: `<div class="ctx-table">
+    <div class="ctx-row"><span class="ctx-mode">Style 1</span><span class="ctx-desc"><code>import math_ops</code> → call as <code>math_ops.add(3,5)</code></span></div>
+    <div class="ctx-row ctx-highlight-row"><span class="ctx-mode">Style 2</span><span class="ctx-desc"><code>import math_ops as m</code> → call as <code>?.add(3,5)</code></span></div>
+    <div class="ctx-row"><span class="ctx-mode">Style 3</span><span class="ctx-desc"><code>from math_ops import add</code> → call as <code>add(3,5)</code></span></div>
+  </div>`,
+  hint: 'When you alias a module, the ORIGINAL name is no longer usable',
+  text: 'After <code>import math_ops as m</code>, which call is correct?',
+  choices: ["math_ops.add(3, 5)", "m.add(3, 5)", "add(3, 5)", "math_ops.m.add(3, 5)"],
+  answer: 1,
+  feedback: "Aliasing with <code>as m</code> means <code>math_ops</code> is <strong>no longer a defined name</strong> — only <code>m</code> is. Calling <code>math_ops.add()</code> raises <code>NameError</code>. Always use the alias: <code>m.add(3, 5)</code>."
+},
+
+{ id:26, part:'Part 4', partLabel:'📦 Modular Programming', type:'fill',
+  context: `<div class="ctx-code"><span class="ctx-comment"># Style 3 — import a specific function directly</span>
+<span class="ctx-blank">____</span> math_ops import add
+
+<span class="ctx-comment"># Now call it with NO prefix:</span>
+result = add(3, 5)    <span class="ctx-comment"># ✓ no math_ops. prefix needed</span>
+print(result)         <span class="ctx-comment"># 8</span></div>`,
+  hint: 'The keyword that lets you pull one name out of a module',
+  text: 'What keyword starts the import line so <code>add</code> can be called without any prefix?',
+  answer: 'from',
+  feedback: "<code>from math_ops import add</code> binds <code>add</code> directly into the current namespace. After this, <code>add(3, 5)</code> works fine — but calling <code>math_ops.add()</code> would raise a <code>NameError</code> since <code>math_ops</code> was never fully imported."
+},
+
+{ id:27, part:'Part 4', partLabel:'📦 Modular Programming', type:'mc',
+  context: `<div class="ctx-table">
+    <div class="ctx-row"><span class="ctx-mode">Style 4</span><span class="ctx-desc"><code>from mypackage import module1</code> → you get the <em>module object</em></span></div>
+    <div class="ctx-row"><span class="ctx-mode">Style 5</span><span class="ctx-desc"><code>from mypackage.module1 import greet</code> → you get the <em>function directly</em></span></div>
+  </div>`,
+  hint: 'Style 4 gives you the module, not the function itself',
+  text: 'After <code>from mypackage import module1</code>, how do you call <code>greet()</code>?',
+  choices: ["greet()", "mypackage.greet()", "module1.greet()", "mypackage.module1.greet()"],
+  answer: 2,
+  feedback: "Style 4 imports the <strong>module object</strong> named <code>module1</code> — you still need <code>module1.greet()</code> to access the function inside it. Only Style 5 (<code>from mypackage.module1 import greet</code>) lets you call <code>greet()</code> directly with no prefix."
+},
+
+{ id:28, part:'Part 4', partLabel:'📦 Modular Programming', type:'mc',
+  context: `<div class="ctx-code">mypackage/
+├── <span class="ctx-highlight">____</span>        <span class="ctx-comment"># ← this file MUST exist</span>
+└── module1.py    <span class="ctx-comment"># contains: def greet(): print('Hello!')</span>
+
+<span class="ctx-comment"># Without that file, this import fails:</span>
+from mypackage import module1   <span class="ctx-comment"># ImportError!</span></div>`,
+  hint: 'This file can be completely empty — its presence is what matters',
+  text: 'What file must exist inside the <code>mypackage</code> folder for Python to treat it as a package?',
+  choices: ["config.py", "setup.py", "__init__.py", "main.py"],
+  answer: 2,
+  feedback: "<code>__init__.py</code> (even completely empty) signals to Python that the folder is a <strong>package</strong> and can be imported. Without it, <code>from mypackage import module1</code> raises <code>ModuleNotFoundError: No module named 'mypackage'</code>."
+},
+
+{ id:29, part:'Part 4', partLabel:'📦 Modular Programming', type:'mc',
+  context: `<div class="ctx-table">
+    <div class="ctx-row"><span class="ctx-mode">import math_ops</span><span class="ctx-desc">Call: <code>math_ops.add(3,5)</code> — needs prefix</span></div>
+    <div class="ctx-row"><span class="ctx-mode">import math_ops as m</span><span class="ctx-desc">Call: <code>m.add(3,5)</code> — needs alias prefix</span></div>
+    <div class="ctx-row ctx-highlight-row"><span class="ctx-mode">from math_ops import add</span><span class="ctx-desc">Call: <code>add(3,5)</code> — NO prefix needed ✓</span></div>
+    <div class="ctx-row"><span class="ctx-mode">from mypackage import module1</span><span class="ctx-desc">Call: <code>module1.greet()</code> — needs module prefix</span></div>
+  </div>`,
+  hint: 'Only one style puts the function name directly in your namespace',
+  text: 'Which import style lets you call <code>add(3, 5)</code> with <strong>absolutely no prefix</strong>?',
+  choices: [
+    "import math_ops",
+    "import math_ops as m",
+    "from math_ops import add",
+    "from mypackage import module1"
+  ],
+  answer: 2,
+  feedback: "<code>from math_ops import add</code> injects <code>add</code> <strong>directly into the current namespace</strong> — no prefix needed. All other styles require some prefix (<code>math_ops.</code>, <code>m.</code>, or <code>module1.</code>)."
+},
+
+{ id:30, part:'Part 4', partLabel:'📦 Modular Programming', type:'fill',
+  context: `<div class="ctx-code"><span class="ctx-comment"># Style 5 — import the function directly from a package module</span>
+from mypackage.<span class="ctx-blank">____</span> import greet
+
+<span class="ctx-comment"># Now call greet() with NO prefix:</span>
+greet()   <span class="ctx-comment"># prints: Hello!</span>
+
+<span class="ctx-comment"># File structure:
+# mypackage/
+# ├── __init__.py
+# └── module1.py  ← greet() is defined here</span></div>`,
+  hint: 'The module filename (without .py) that contains the greet function',
+  text: 'What goes in the blank to import <code>greet</code> directly from the package?',
+  answer: 'module1',
+  feedback: "<code>from mypackage.module1 import greet</code> is Style 5. It gives you <code>greet</code> directly — no prefix needed. Compare with Style 4 (<code>from mypackage import module1</code>) which gives you the whole module object, requiring <code>module1.greet()</code>."
+},
+
+{ id:31, part:'Part 4', partLabel:'📦 Modular Programming', type:'mc',
+  context: `<div class="ctx-code">import math_ops as m    <span class="ctx-comment"># aliased as 'm'</span>
+
+<span class="ctx-highlight">math_ops.add(2, 3)</span>     <span class="ctx-comment"># ← what happens here?</span></div>`,
+  hint: 'What name is actually defined in memory after aliasing?',
+  text: 'A student aliases <code>math_ops</code> as <code>m</code>, then calls <code>math_ops.add(2, 3)</code>. What happens?',
+  choices: [
+    "Returns 5 — Python finds math_ops automatically",
+    "NameError — 'math_ops' is not defined; only 'm' was bound",
+    "Returns None — the alias hides the return value",
+    "Python automatically maps math_ops back to m"
+  ],
+  answer: 1,
+  feedback: "After <code>import math_ops as m</code>, <strong>only the name <code>m</code> is bound</strong> in memory — <code>math_ops</code> does not exist as a name. Using it raises: <code>NameError: name 'math_ops' is not defined</code>. The fix: use <code>m.add(2, 3)</code>."
+},
+
+{ id:32, part:'Part 4', partLabel:'📦 Modular Programming', type:'mc',
+  context: `<div class="ctx-table">
+    <div class="ctx-row"><span class="ctx-mode">import math_ops</span><span class="ctx-desc">→ <code>?</code></span></div>
+    <div class="ctx-row"><span class="ctx-mode">import math_ops as m</span><span class="ctx-desc">→ <code>m.add(3,5)</code></span></div>
+    <div class="ctx-row"><span class="ctx-mode">from math_ops import add</span><span class="ctx-desc">→ <code>add(3,5)</code></span></div>
+    <div class="ctx-row"><span class="ctx-mode">from mypackage import module1</span><span class="ctx-desc">→ <code>module1.greet()</code></span></div>
+    <div class="ctx-row"><span class="ctx-mode">from mypackage.module1 import greet</span><span class="ctx-desc">→ <code>greet()</code></span></div>
+  </div>`,
+  hint: 'Style 1 = full module name. You keep the module name as the prefix.',
+  text: 'Using Style 1 (<code>import math_ops</code>), how do you call <code>add()</code>?',
+  choices: [
+    "add(3, 5)",
+    "m.add(3, 5)",
+    "math_ops.add(3, 5)",
+    "module.add(3, 5)"
+  ],
+  answer: 2,
+  feedback: "Style 1 keeps the <strong>full module name as the prefix</strong>: <code>math_ops.add(3, 5)</code>. Memorize the 5 styles: (1) whole module → (2) alias → (3) specific function → (4) module from package → (5) function from package."
+},
+
+// ════════════════════════════════════════
+//  PART 5 — TEST CASES  (8 questions)
+// ════════════════════════════════════════
+
+{ id:33, part:'Part 5', partLabel:'✅ Test Cases', type:'mc',
+  context: `<div class="ctx-table">
+    <div class="ctx-row ctx-highlight-row"><span class="ctx-mode">TC-01</span><span class="ctx-desc">Valid login — correct email + correct password</span></div>
+    <div class="ctx-row"><span class="ctx-mode">TC-02</span><span class="ctx-desc">Wrong password — correct email, wrong password</span></div>
+    <div class="ctx-row"><span class="ctx-mode">TC-03</span><span class="ctx-desc">Wrong email — non-existent account</span></div>
+    <div class="ctx-row"><span class="ctx-mode">TC-04</span><span class="ctx-desc">Empty fields — both email and password blank</span></div>
+    <div class="ctx-row"><span class="ctx-mode">TC-05</span><span class="ctx-desc">Locked account — correct credentials, but account is locked</span></div>
+  </div>`,
+  hint: 'TC-01 must confirm the GOOD path — that the system actually works',
+  text: 'TC-01 is called the "happy path." What is its specific purpose?',
+  choices: [
+    "To intentionally break the login system and find bugs",
+    "To confirm the system grants access when valid credentials are entered",
+    "To verify that empty fields are rejected",
+    "To test whether locked accounts are handled"
+  ],
+  answer: 1,
+  feedback: "TC-01 is the <strong>happy path</strong> — it confirms the system <em>works correctly</em> under ideal conditions. You always need at least one valid test case before testing invalid ones. Without TC-01, you don't know if the system can successfully log in anyone at all."
+},
+
+{ id:34, part:'Part 5', partLabel:'✅ Test Cases', type:'fill',
+  context: `<div class="ctx-table">
+    <div class="ctx-row"><span class="ctx-mode">❌ Bad naming</span><span class="ctx-desc">test1, LoginTest, mytest, Case_A</span></div>
+    <div class="ctx-row ctx-highlight-row"><span class="ctx-mode">✓ Correct format</span><span class="ctx-desc">TC-01, TC-02, TC-03, TC-04, TC-05</span></div>
+  </div>`,
+  hint: 'Two letters, a dash, then a two-digit number',
+  text: 'Test case IDs must follow a consistent format. Write the correct ID for the first test case.',
+  answer: 'TC-01',
+  alsoAccept: ['TC-0X','TC-XX','TC'],
+  feedback: "The standard format is <code>TC-01, TC-02, TC-03...</code> — uppercase TC, a dash, then a zero-padded number. This makes test cases easy to reference, sort, and discuss. Random names like 'test1' or 'LoginCase' are not acceptable."
+},
+
+{ id:35, part:'Part 5', partLabel:'✅ Test Cases', type:'mc',
+  context: `<div class="ctx-table">
+    <div class="ctx-row ctx-highlight-row"><span class="ctx-mode">TC-02 Input</span><span class="ctx-desc">Email: <code>user@email.com</code> ✓ (exists)<br>Password: <code>wrong_password</code> ✗ (incorrect)</span></div>
+  </div>`,
+  hint: 'The account EXISTS — so it\'s not "not found." But the password is wrong.',
+  text: 'For TC-02, what is the correct Expected Output?',
+  choices: [
+    "'No account found with this email.'",
+    "'The password you've entered is incorrect.'",
+    "Login successful — redirect to home feed",
+    "'Email or phone number required.'"
+  ],
+  answer: 1,
+  feedback: "The email is valid (account exists) but the password is wrong. The system <em>found</em> the account but rejected the credential → <strong>'The password you've entered is incorrect.'</strong><br>Compare to TC-03 where the email itself doesn't exist → 'No account found.'"
+},
+
+{ id:36, part:'Part 5', partLabel:'✅ Test Cases', type:'mc',
+  context: `<div class="ctx-scenario">
+  <strong>From the reviewer:</strong><br>
+  "Empty field and locked account are <em>common cases that students miss</em> — include them."<br><br>
+  These two cover boundary validation (TC-04) and account state logic (TC-05).
+  </div>`,
+  hint: 'The reviewer calls these out specifically as the most commonly skipped',
+  text: 'Which two test cases are MOST commonly forgotten by students according to the reviewer?',
+  choices: [
+    "TC-01 (valid login) and TC-02 (wrong password)",
+    "TC-03 (wrong email) and TC-04 (empty fields)",
+    "TC-04 (empty fields) and TC-05 (locked account)",
+    "TC-02 (wrong password) and TC-05 (locked account)"
+  ],
+  answer: 2,
+  feedback: "The reviewer explicitly warns: <strong>TC-04 (empty fields)</strong> and <strong>TC-05 (locked/edge case)</strong> are most often skipped. TC-04 tests input validation; TC-05 tests account-level state. Both are critical for complete test coverage."
+},
+
+{ id:37, part:'Part 5', partLabel:'✅ Test Cases', type:'mc',
+  context: `<div class="ctx-table">
+    <div class="ctx-row"><span class="ctx-mode">TC ID</span><span class="ctx-desc">Unique identifier: TC-01, TC-02 …</span></div>
+    <div class="ctx-row"><span class="ctx-mode">Scenario</span><span class="ctx-desc">Plain-English description of what is being tested</span></div>
+    <div class="ctx-row"><span class="ctx-mode">Input</span><span class="ctx-desc">The exact data you enter (email / password)</span></div>
+    <div class="ctx-row ctx-highlight-row"><span class="ctx-mode">Expected Output</span><span class="ctx-desc">What a <em>correctly working</em> system should respond with</span></div>
+  </div>`,
+  hint: 'Expected Output is written BEFORE you run the test — it\'s your specification',
+  text: 'What should the "Expected Output" column in a test case describe?',
+  choices: [
+    "What the buggy system currently outputs when tested",
+    "What a correctly working system should produce for that input",
+    "The raw input data entered by the tester",
+    "The specific bug or defect found during the test"
+  ],
+  answer: 1,
+  feedback: "<strong>Expected Output</strong> is your <em>specification</em> — it defines what the system <strong>should</strong> do when working correctly. You write it before running the test. During testing, you compare the actual output against this to determine pass or fail."
+},
+
+{ id:38, part:'Part 5', partLabel:'✅ Test Cases', type:'mc',
+  context: `<div class="ctx-table">
+    <div class="ctx-row ctx-highlight-row"><span class="ctx-mode">TC-03 Input</span><span class="ctx-desc">Email: <code>unknown@email.com</code> ✗ (no account)<br>Password: <code>anypassword</code></span></div>
+  </div>`,
+  hint: 'No account exists for this email — the system can\'t even find it to check the password',
+  text: 'For TC-03, what is the correct Expected Output?',
+  choices: [
+    "'The password you've entered is incorrect.'",
+    "'No account found with this email.'",
+    "Login successful",
+    "'Email or phone number required.'"
+  ],
+  answer: 1,
+  feedback: "TC-03 uses a non-existent email → the database lookup fails before even checking the password → <strong>'No account found with this email.'</strong><br>Key distinction: TC-02 finds the account but rejects the password. TC-03 cannot find the account at all."
+},
+
+{ id:39, part:'Part 5', partLabel:'✅ Test Cases', type:'mc',
+  context: `<div class="ctx-table">
+    <div class="ctx-row ctx-highlight-row"><span class="ctx-mode">TC-04 Input</span><span class="ctx-desc">Email: <code>(blank)</code><br>Password: <code>(blank)</code></span></div>
+  </div>`,
+  hint: 'Input validation should catch empty fields BEFORE touching the database',
+  text: 'TC-04 submits both email and password as blank. What should the system return?',
+  choices: [
+    "'The password you've entered is incorrect.'",
+    "'No account found with this email.'",
+    "'Email or phone number required.'",
+    "Login successful — blank credentials are accepted as guest"
+  ],
+  answer: 2,
+  feedback: "Empty fields trigger <strong>input validation</strong> — the system checks for blank fields before querying the database at all. Expected output: <strong>'Email or phone number required.'</strong> A well-built login system should never attempt a database lookup with empty credentials."
+},
+
+{ id:40, part:'Part 5', partLabel:'✅ Test Cases', type:'mc',
+  context: `<div class="ctx-table">
+    <div class="ctx-row ctx-highlight-row"><span class="ctx-mode">TC-05 Input</span><span class="ctx-desc">Email: <code>locked@email.com</code> ✓ (account exists)<br>Password: <code>correct_password</code> ✓ (password is right)</span></div>
+    <div class="ctx-row"><span class="ctx-mode">Account State</span><span class="ctx-desc">🔒 Account has been locked by the system</span></div>
+  </div>`,
+  hint: 'Credentials are correct — but the ACCOUNT STATUS blocks login',
+  text: 'TC-05 uses correct credentials on a locked account. What is the Expected Output?',
+  choices: [
+    "'The password you've entered is incorrect.'",
+    "'No account found with this email.'",
+    "'Your account has been locked. Please reset your password.'",
+    "Login successful — correct credentials always override account locks"
+  ],
+  answer: 2,
+  feedback: "TC-05 is the <strong>edge/special case</strong>. The credentials are valid, but the <em>account state</em> blocks login. Expected output: <strong>'Your account has been locked. Please reset your password.'</strong> This tests that account-level logic is separate from credential-checking logic."
+},
+
+];
+
+// ══════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════
+let questions = [];
+let current = 0;
+let score = 0;
+let answered = false;
+let timerInterval = null;
+let elapsed = 0;
+let wrongIds = [];
+let partScores = {}; // { 'Part 1': {correct:0, total:0} }
+let isRetryMode = false;
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function startQuiz(retry = false) {
+  isRetryMode = retry;
+  if (retry) {
+    questions = shuffle(QUESTIONS.filter(q => wrongIds.includes(q.id)));
+  } else {
+    // shuffle within each part to keep order logical
+    const p1 = shuffle(QUESTIONS.filter(q => q.part === 'Part 1'));
+    const p2 = shuffle(QUESTIONS.filter(q => q.part === 'Part 2'));
+    const p3 = shuffle(QUESTIONS.filter(q => q.part === 'Part 3'));
+    const p4 = shuffle(QUESTIONS.filter(q => q.part === 'Part 4'));
+    const p5 = shuffle(QUESTIONS.filter(q => q.part === 'Part 5'));
+    questions = [...p1, ...p2, ...p3, ...p4, ...p5];
+  }
+  current = 0;
+  score = 0;
+  answered = false;
+  wrongIds = [];
+  elapsed = 0;
+  partScores = {};
+  questions.forEach(q => {
+    if (!partScores[q.part]) partScores[q.part] = { correct: 0, total: 0, label: q.partLabel };
+    partScores[q.part].total++;
+  });
+
+  showScreen('quiz-screen');
+  renderQuestion();
+  startTimer();
+}
+
+function restartAll() { startQuiz(false); }
+function retryWrong() {
+  if (wrongIds.length === 0) { restartAll(); return; }
+  startQuiz(true);
+}
+
+function startTimer() {
+  clearInterval(timerInterval);
+  elapsed = 0;
+  timerInterval = setInterval(() => {
+    elapsed++;
+    const m = String(Math.floor(elapsed / 60)).padStart(2, '0');
+    const s = String(elapsed % 60).padStart(2, '0');
+    const el = document.getElementById('timer');
+    el.textContent = m + ':' + s;
+    el.classList.toggle('warning', elapsed >= 1200);
+  }, 1000);
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// ══════════════════════════════════════════
+//  RENDER QUESTION
+// ══════════════════════════════════════════
+function renderQuestion() {
+  answered = false;
+  const q = questions[current];
+  const total = questions.length;
+
+  document.getElementById('q-counter').textContent = `Q ${current + 1} / ${total}`;
+  document.getElementById('part-tag').textContent = q.partLabel || q.part;
+  document.getElementById('progress-fill').style.width = ((current + 1) / total * 100) + '%';
+
+  const card = document.getElementById('q-card');
+  const formattedText = q.text.replace(/`([^`]+)`/g, '<code>$1</code>');
+
+  // Context box (rendered as-is — already HTML)
+  const ctxHtml = q.context
+    ? `<div class="ctx-box">${q.context}</div>`
+    : '';
+
+  // Hint pill
+  const hintHtml = q.hint
+    ? `<div class="hint-pill">${q.hint}</div>`
+    : '';
+
+  let html = `
+    <div class="q-header">
+      <div class="q-num">Q${current + 1}</div>
+      <div class="q-text">${formattedText}</div>
+    </div>
+    <div class="q-body">
+      ${ctxHtml}
+      ${hintHtml}`;
+
+  if (q.type === 'mc') {
+    const labels = ['A', 'B', 'C', 'D'];
+    html += `<div class="choices">`;
+    q.choices.forEach((c, i) => {
+      const formatted = c.replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\\n/g, '<br>');
+      html += `
+        <button class="choice-btn" data-idx="${i}" onclick="selectChoice(this, ${i})">
+          <span class="choice-label">${labels[i]}</span>
+          <span class="choice-text">${formatted}</span>
+        </button>`;
+    });
+    html += `</div>`;
+  } else {
+    // Fill-in: show visual blank indicator
+    const blankDisplay = q.text.includes('____')
+      ? `<div class="fill-blank-display">Fill in the blank: <span class="ctx-blank">____</span></div>`
+      : '';
+    html += `
+      <div class="fill-wrap">
+        ${blankDisplay}
+        <input class="fill-input" id="fill-input" type="text" placeholder="Type your answer and press Enter..."
+          onkeydown="if(event.key==='Enter') submitFill()"/>
+        <button class="btn-submit" id="fill-btn" onclick="submitFill()">Submit Answer</button>
+      </div>`;
+  }
+
+  html += `
+      <div class="feedback" id="feedback"></div>
+      <div class="clearfix">
+        <button class="btn-next" id="btn-next" onclick="nextQuestion()">
+          ${current + 1 < total ? 'Next Question →' : 'See Results →'}
+        </button>
+      </div>
+    </div>`;
+
+  card.innerHTML = html;
+  card.style.animation = 'none';
+  requestAnimationFrame(() => card.style.animation = 'slideIn 0.3s ease');
+
+  if (q.type === 'fill') {
+    setTimeout(() => document.getElementById('fill-input')?.focus(), 100);
+  }
+}
+
+// ══════════════════════════════════════════
+//  ANSWER HANDLING
+// ══════════════════════════════════════════
+function selectChoice(btn, idx) {
+  if (answered) return;
+  answered = true;
+  const q = questions[current];
+  const btns = document.querySelectorAll('.choice-btn');
+
+  btns.forEach(b => b.disabled = true);
+
+  const isCorrect = idx === q.answer;
+  btn.classList.add(isCorrect ? 'correct' : 'wrong');
+  if (!isCorrect) {
+    btns[q.answer].classList.add('reveal-correct');
+    wrongIds.push(q.id);
+  } else {
+    score++;
+    partScores[q.part].correct++;
+  }
+
+  showFeedback(isCorrect, q.feedback);
+}
+
+function submitFill() {
+  if (answered) return;
+  const input = document.getElementById('fill-input');
+  const btn = document.getElementById('fill-btn');
+  if (!input) return;
+
+  const raw = input.value.trim().toLowerCase().replace(/\(\)/g, '');
+  const q = questions[current];
+  const correct = q.answer.toLowerCase().replace(/\(\)/g, '');
+  const alsoAccept = (q.alsoAccept || []).map(a => a.toLowerCase().replace(/\(\)/g, ''));
+
+  answered = true;
+  input.disabled = true;
+  btn.disabled = true;
+
+  const isCorrect = raw === correct || alsoAccept.includes(raw) || correct.includes(raw) || raw.includes(correct);
+  input.classList.add(isCorrect ? 'correct' : 'wrong');
+  if (!isCorrect) {
+    wrongIds.push(q.id);
+    input.value = input.value + '  ✗  Answer: ' + q.answer;
+  } else {
+    score++;
+    partScores[q.part].correct++;
+  }
+
+  showFeedback(isCorrect, q.feedback);
+}
+
+function showFeedback(isCorrect, text) {
+  const fb = document.getElementById('feedback');
+  const next = document.getElementById('btn-next');
+  fb.className = 'feedback show ' + (isCorrect ? 'correct-fb' : 'wrong-fb');
+  const icon = isCorrect ? '✓ Correct! ' : '✗ Incorrect. ';
+  fb.innerHTML = '<strong>' + icon + '</strong>' + text;
+  next.classList.add('show');
+}
+
+function nextQuestion() {
+  current++;
+  if (current >= questions.length) {
+    showResults();
+  } else {
+    renderQuestion();
+  }
+}
+
+// ══════════════════════════════════════════
+//  RESULTS
+// ══════════════════════════════════════════
+function showResults() {
+  clearInterval(timerInterval);
+  const total = questions.length;
+  const pct = Math.round(score / total * 100);
+
+  // Medal
+  const medals = pct >= 90 ? '🏆' : pct >= 75 ? '🥇' : pct >= 60 ? '🥈' : '📚';
+  const titles = pct >= 90 ? 'Outstanding!' : pct >= 75 ? 'Great job!' : pct >= 60 ? 'Good effort!' : 'Keep studying!';
+  const subs = pct >= 90 ? "You're exam-ready. Excellent recall!" : pct >= 75 ? "Solid performance. Review the wrong ones." : pct >= 60 ? "You're getting there. Retry the wrong answers." : "Focus on the weak areas and try again.";
+
+  document.getElementById('result-medal').textContent = medals;
+  document.getElementById('result-title').textContent = titles;
+  document.getElementById('result-sub').textContent = subs;
+  document.getElementById('score-pct').textContent = pct + '%';
+  document.getElementById('score-label').textContent = score + ' / ' + total + ' correct';
+  document.getElementById('rs-correct').textContent = score;
+  document.getElementById('rs-wrong').textContent = total - score;
+
+  const m = String(Math.floor(elapsed / 60)).padStart(2, '0');
+  const s = String(elapsed % 60).padStart(2, '0');
+  document.getElementById('rs-time').textContent = m + ':' + s;
+
+  // Animate ring
+  const circumference = 314;
+  setTimeout(() => {
+    const offset = circumference - (pct / 100 * circumference);
+    const ring = document.getElementById('ring-fill');
+    ring.style.strokeDashoffset = offset;
+    ring.style.stroke = pct >= 75 ? 'var(--green)' : pct >= 50 ? 'var(--yellow)' : 'var(--accent)';
+  }, 300);
+
+  // Part breakdown
+  const partOrder = ['Part 1', 'Part 2', 'Part 3', 'Part 4', 'Part 5'];
+  const colors = { 'Part 1':'#1a5c9e', 'Part 2':'#7c3aed', 'Part 3':'#2d7a4f', 'Part 4':'#c47d00', 'Part 5':'#c84b2f' };
+  let rowsHtml = '';
+  partOrder.forEach(p => {
+    const ps = partScores[p];
+    if (!ps) return;
+    const ppct = Math.round(ps.correct / ps.total * 100);
+    rowsHtml += `
+      <div class="rb-row">
+        <div class="rb-label">${ps.label.replace(/[📁🪟🔧📦✅] /,'')}</div>
+        <div class="rb-bar"><div class="rb-fill" style="width:0%;background:${colors[p]}" data-pct="${ppct}"></div></div>
+        <div class="rb-pct">${ppct}%</div>
+      </div>`;
+  });
+  document.getElementById('breakdown-rows').innerHTML = rowsHtml;
+
+  showScreen('results-screen');
+
+  setTimeout(() => {
+    document.querySelectorAll('.rb-fill').forEach(el => {
+      el.style.width = el.dataset.pct + '%';
+    });
+  }, 400);
+
+  // Hide retry wrong if no wrong answers
+  if (wrongIds.length === 0) {
+    document.querySelector('.btn-retry:not(.secondary)').textContent = 'Perfect Score! ★';
+    document.querySelector('.btn-retry:not(.secondary)').onclick = restartAll;
+  }
+}
+</script>
+</body>
+</html>
